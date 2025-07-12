@@ -1,0 +1,15 @@
+node_modules/
+.pnpm/
+
+dist/
+build/
+
+.env
+.env.local
+
+logs/
+*.logs
+npm-debug.log*
+pnpm-debug.log*
+
+frontend/
