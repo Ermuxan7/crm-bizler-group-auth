@@ -15,8 +15,18 @@ export const loginUserServices = async (email: string, password: string) => {
     throw new AppError("Email yaki password qate!");
   }
 
-  const accessToken = createToken({ id: user.id, email: user.email });
-  const refreshToken = createRefreshToken({ id: user.id, email: user.email });
+  const accessToken = createToken({
+    id: user.id,
+    email: user.email,
+    role: user.role,
+  });
+  const refreshToken = createRefreshToken({
+    id: user.id,
+    email: user.email,
+    role: user.role,
+  });
+
+  await prisma.refreshToken.deleteMany({ where: { userId: user.id } });
 
   await prisma.refreshToken.create({
     data: {

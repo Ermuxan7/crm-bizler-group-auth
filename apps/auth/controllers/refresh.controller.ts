@@ -1,5 +1,9 @@
 import { Request, Response } from "express";
-import { createToken, verifyRefreshToken } from "../utils/token.utils";
+import {
+  createRefreshToken,
+  createToken,
+  verifyRefreshToken,
+} from "../utils/token.utils";
 import { cookieOptions } from "../utils/cookies";
 import { prisma } from "../prisma/client";
 
@@ -24,12 +28,31 @@ export const refreshController = async (req: Request, res: Response) => {
         .json({ message: "Refresh tokennin waqiti otken yaki tabilmadi" });
     }
 
+    await prisma.refreshToken.deleteMany({ where: { token: refreshToken } });
+
     const accessToken = createToken({ id: decoded.id, email: decoded.email });
+    const newRefreshToken = createRefreshToken({
+      id: decoded.id,
+      email: decoded.email,
+    });
+
+    await prisma.refreshToken.create({
+      data: {
+        token: newRefreshToken,
+        userId: decoded.id,
+        expiresAt: new Date(Date.now() + 7 * 24 * 60 * 60 * 1000),
+      },
+    });
 
     res
-      .cookie("accessToken", accessToken, cookieOptions(15 * 60 * 1000))
+      .cookie("accessToken", accessToken, cookieOptions(60 * 60 * 1000))
+      .cookie(
+        "refreshToken",
+        newRefreshToken,
+        cookieOptions(7 * 24 * 60 * 60 * 1000)
+      )
       .status(200)
-      .json({ message: "Access token qayta jaratildi!" });
+      .json({ message: "Tokenler qayta jaratildi!" });
   } catch (error) {
     console.error("Refresh token error: ", error);
     res

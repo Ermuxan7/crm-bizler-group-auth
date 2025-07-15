@@ -12,6 +12,7 @@ model User {
   name          String
   email         String         @unique
   password      String
+  role Role @default(USER)
   createdAt     DateTime       @default(now())
   refreshTokens RefreshToken[]
 }
@@ -23,4 +24,9 @@ model RefreshToken {
   userId    String
   createdAt DateTime @default(now())
   expiresAt DateTime
+}
+
+enum Role{
+  USER
+  ADMIN
 }

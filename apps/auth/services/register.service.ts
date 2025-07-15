@@ -21,13 +21,19 @@ export const registerUserService = async (
       name,
       email,
       password: hashedPassword,
+      role: "USER",
     },
   });
 
-  const accessToken = createToken({ id: newUser.id, email: newUser.email });
+  const accessToken = createToken({
+    id: newUser.id,
+    email: newUser.email,
+    role: newUser.role,
+  });
   const refreshToken = createRefreshToken({
     id: newUser.id,
     email: newUser.email,
+    role: newUser.role,
   });
 
   await prisma.refreshToken.create({

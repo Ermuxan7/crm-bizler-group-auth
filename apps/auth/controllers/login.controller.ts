@@ -20,8 +20,12 @@ export const loginController = async (req: Request, res: Response) => {
     );
 
     res
-      .cookie("refreshToken", refreshToken, cookieOptions(7 * 24 * 60 * 60 * 1000))
-      .cookie("accessToken", accessToken, cookieOptions(15 * 60 * 1000))
+      .cookie(
+        "refreshToken",
+        refreshToken,
+        cookieOptions(7 * 24 * 60 * 60 * 1000)
+      )
+      .cookie("accessToken", accessToken, cookieOptions(60 * 60 * 1000))
       .status(200)
       .json({
         message: "Tabisli kirdin'iz",

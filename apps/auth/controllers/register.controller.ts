@@ -21,7 +21,7 @@ export const registerController = async (req: Request, res: Response) => {
     );
 
     res
-      .cookie("accessToken", accessToken, cookieOptions(15 * 60 * 1000))
+      .cookie("accessToken", accessToken, cookieOptions(60 * 60 * 1000))
       .cookie(
         "refreshToken",
         refreshToken,

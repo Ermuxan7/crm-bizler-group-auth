@@ -1,18 +1,16 @@
-import { Response, Request, NextFunction } from "express";
+import { Response, Request, NextFunction, RequestHandler } from "express";
 import { verifyToken } from "../utils/token.utils";
+import { Role } from "@prisma/client";
 
 export interface AuthRequest extends Request {
   user: {
     id: string;
     email: string;
+    role: Role;
   };
 }
 
-export const authMiddleware = (
-  req: Request,
-  res: Response,
-  next: NextFunction
-) => {
+export const authMiddleware: RequestHandler = (req, res, next) => {
   const token = req.cookies.accessToken;
 
   if (!token) {
